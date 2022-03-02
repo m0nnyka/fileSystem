@@ -9,7 +9,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
@@ -54,14 +54,19 @@ module.exports = function(grunt) {
       all: ['test/gruntfile/*.js']
     },
     // The actual grunt server settings
-    serve: {
-      options: {
-        port: 9000,
-        // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
-        livereload: 35729
-      }
-    },
+    // serve: {
+    //   options: {
+    //     port: 9000,
+    //     // Change this to '0.0.0.0' to access the server from outside.
+    //     hostname: 'localhost',
+    //     //livereload: 35729,
+    //     'client.js': {
+    //       tasks: ['html2js', 'concat'],
+    //       output: 'client.js',
+    //       contentType: 'text/javascript' // optional
+    //     }
+    //   }
+    // },
   });
 
   // These plugins provide necessary tasks.
@@ -71,7 +76,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-serve');
 
-  grunt.registerTask('test', ['qunit:src','jshint']);
+  grunt.registerTask('test', ['qunit:src', 'jshint']);
 
   // "npm test" runs these tasks
   grunt.registerTask('test', ['jshint', 'nodeunit', 'subgrunt']);
@@ -79,17 +84,14 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['test', 'jshint']);
 
-  // register task
-  grunt.registerTask('server', ['serve']);
-
   // Run sub-grunt files, because right now, testing tasks is a pain.
-  grunt.registerMultiTask('subgrunt', 'Run a sub-gruntfile.', function() {
+  grunt.registerMultiTask('subgrunt', 'Run a sub-gruntfile.', function () {
     var path = require('path');
-    grunt.util.async.forEachSeries(this.filesSrc, function(gruntfile, next) {
+    grunt.util.async.forEachSeries(this.filesSrc, function (gruntfile, next) {
       grunt.util.spawn({
         grunt: true,
         args: ['--gruntfile', path.resolve(gruntfile)],
-      }, function(error, result) {
+      }, function (error, result) {
         if (error) {
           grunt.log.error(result.stdout).writeln();
           next(new Error('Error running sub-gruntfile "' + gruntfile + '".'));
